@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="style.css" />
+    <title>BC Table Finder</title>
+    <script src="data.js"></script>
+  </head>
+  <body>
+    <section>
+      <h1>BC Table & Fields Finder</h1>
+      <div class="container">
+          <div class="search-container">
+              <input id="tableId" placeholder="Search Table..." />
+              <button id="searchBtn"><i class="fas fa-search"></i></button>
+          </div>
+          <div id="suggestionList"></div>
+          <div class="texts">
+              <table id="tableList">
+                  <thead>
+                      <tr>
+                          <th>ID</th>
+                          <th>Name</th>
+                      </tr>
+                  </thead>
+                  <tbody></tbody>
+              </table>
+              <hr>
+              <table id="fieldsList" style="display: none;">
+                  <thead>
+                      <tr>
+                          <th>ID</th>
+                          <th>Name</th>
+                      </tr>
+                  </thead>
+                  <tbody></tbody>
+              </table>
+          </div>
+      </div>
+  </section>
+    <script>
+      const tableId = document.querySelector("#tableId");
+      const searchBtn = document.querySelector("#searchBtn");
+      const tableList = document.querySelector("#tableList tbody");
+      const fieldsList = document.querySelector("#fieldsList");
+      const fieldsTable = document.querySelector("#fieldsList tbody");
+      
+      function showTables() {
+        tableList.innerHTML = "";
+        const filteredData = dataTables.filter((table) =>
+          table.NameEn.toLowerCase().includes(tableId.value.toLowerCase())
+        );
+        filteredData.forEach((table) => {
+          const row = document.createElement("tr");
+          row.innerHTML = `<td>${table.Id}</td><td>${table.NameEn}</td>`;
+          row.addEventListener("click", () => showFields(table.Fields));
+          tableList.appendChild(row);
+        });
+      }
+      
+      function showFields(fields) {
+        fieldsTable.innerHTML = "";
+        fieldsList.style.display = "table";
+        fields.forEach((field) => {
+          const row = document.createElement("tr");
+          row.innerHTML = `<td>${field.Id}</td><td>${field.NameEn}</td>`;
+          fieldsTable.appendChild(row);
+        });
+      }
+      
+      searchBtn.addEventListener("click", showTables);
+      tableId.addEventListener("input", showTables);
+    </script>
+  </body>
+</html>
